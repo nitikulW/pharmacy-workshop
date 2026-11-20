@@ -484,9 +484,38 @@ tbody tr.active td { background: var(--primary-soft); }
 .seg button { border: 0; background: none; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-2); }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--primary-text); box-shadow: var(--shadow); }
 .card-head .seg { align-self: center; }
-.section-title { display: flex; align-items: center; gap: 10px; margin: 26px 0 12px; }
-.section-title h2 { margin: 0; font-size: 18px; }
-.section-title span { color: var(--text-2); font-size: 13px; }
+.section-title { margin: 0 0 14px; }
+.section-title h2 { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3; }
+.section-title p { margin: 4px 0 0; color: var(--text-2); font-size: 13.5px; }
+
+/* แถบปุ่มเลือกส่วน + แสดงทีละส่วน */
+.section-tabs {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  margin-bottom: 12px; padding: 5px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: var(--shadow);
+}
+.section-tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 10px;
+  color: var(--text-2); text-decoration: none;
+  font-size: 14px; font-weight: 600; white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.section-tab:hover { background: var(--surface-2); color: var(--text); }
+.section-tab.active { background: var(--primary-soft); color: var(--primary-text); }
+.section-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+.section-tab .badge {
+  font-size: 11px; font-weight: 700; padding: 0 6px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2);
+}
+.section-tab.active .badge {
+  background: var(--surface); border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  color: var(--primary-text);
+}
+.page-section { display: none; }
+.page-section.active { display: block; }
+.page-section > :last-child { margin-bottom: 0; }
 
 /* สถานะ */
 .st { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -505,7 +534,8 @@ tbody tr.danger td { background: color-mix(in srgb, var(--bad-soft) 60%, transpa
 .cover .bar span { background: var(--c, var(--primary)); }
 .cover b { min-width: 44px; text-align: right; }
 .muted { color: var(--text-2); }
-.table-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.table-tools { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 14px; }
+.table-tools .card-head { margin-bottom: 0; flex: 1; min-width: 220px; }
 .table-tools .count { margin-left: auto; }
 .pager { display: flex; align-items: center; gap: 8px; justify-content: flex-end; padding-top: 12px; font-size: 13px; color: var(--text-2); flex-wrap: wrap; }
 .pager .pg-now { min-width: 90px; text-align: center; font-weight: 600; color: var(--text); }
@@ -548,6 +578,8 @@ tbody tr.danger td { background: color-mix(in srgb, var(--bad-soft) 60%, transpa
   .dq-sum { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 640px) {
+  .section-tabs { gap: 5px; padding: 4px; }
+  .section-tab { padding: 7px 11px; font-size: 13.5px; }
   .dq-item { grid-template-columns: auto 1fr; }
   .dq-item .src, .dq-item .act { grid-column: 2; }
 }
@@ -721,9 +753,6 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") { $("sidebar").classList.remove("show"); $("scrim").classList.remove("show"); }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") { e.preventDefault(); toggleSidebar(); }
 });
-document.querySelectorAll("[data-nav]").forEach(a => a.addEventListener("click", () => {
-  $("sidebar").classList.remove("show"); $("scrim").classList.remove("show");
-}));
 
 /* =====================================================================
    2) โหลดไฟล์ทั้ง 3
@@ -926,7 +955,7 @@ const catOf = sku => D.drug.get(sku)?.category || NOT_IN_LIST;
 const nameOf = sku => D.drug.get(sku)?.generic_name || sku;
 const drugLabel = sku => {
   const d = D.drug.get(sku);
-  return d ? `${d.generic_name} <span class="muted">${esc(d.strength)}</span>` : `<span class="muted">${esc(sku)}</span> <span class="flag" title="ไม่อยู่ในบัญชียา">?</span>`;
+  return d ? `${esc(d.generic_name)} <span class="muted">${esc(d.strength)}</span>` : `<span class="muted">${esc(sku)}</span> <span class="flag" title="ไม่อยู่ในบัญชียา">?</span>`;
 };
 
 /* =====================================================================
@@ -1027,14 +1056,18 @@ function buildPage() {
       <p>${D.issues.filter(i => i.action === "danger").map(i => esc(i.id + ": " + i.msg)).join("<br>")}</p>
       <p><a href="#quality">ดูรายละเอียดในส่วนคุณภาพข้อมูล</a></p></div></div>` : ""}
 
+    <nav class="section-tabs" aria-label="เลือกส่วนเนื้อหา">
+      ${SECTION_TABS.map(([id, label]) => `<a class="section-tab" href="#${id}" data-nav>${esc(label)}${id === "quality" ? `<span class="badge num">${fmt(D.issues.length)}</span>` : ""}</a>`).join("")}
+    </nav>
+
     <div class="filters" role="group" aria-label="ตัวกรอง">
       <div class="select"><select id="fCat" aria-label="หมวดยา">${opt("", "ทุกหมวดยา")}${D.cats.map(c => opt(c, c)).join("")}</select></div>
       <div class="select"><select id="fPharm" aria-label="เภสัชกร">${opt("", "เภสัชกรทุกคน")}${D.pharms.map(p => opt(p, p)).join("")}</select></div>
       <div class="range" role="group" aria-label="ช่วงเวลาการจ่ายยา">
         ${ICON.cal}
-        <input type="date" id="dFrom" min="${D.from}" max="${D.to}" aria-label="ตั้งแต่วันที่">
+        <input type="date" id="dFrom" min="${esc(D.from)}" max="${esc(D.to)}" aria-label="ตั้งแต่วันที่">
         <span>ถึง</span>
-        <input type="date" id="dTo" min="${D.from}" max="${D.to}" aria-label="ถึงวันที่">
+        <input type="date" id="dTo" min="${esc(D.from)}" max="${esc(D.to)}" aria-label="ถึงวันที่">
         <div class="seg" role="group" aria-label="ช่วงลัด">
           <button data-range="7" aria-pressed="false">7 วัน</button><button data-range="14" aria-pressed="false">14 วัน</button><button data-range="all" aria-pressed="true">ทั้งหมด</button>
         </div>
@@ -1043,58 +1076,66 @@ function buildPage() {
       <div class="chips" id="chips"></div>
     </div>
 
-    <section id="overview" class="kpis" aria-label="ตัวชี้วัดหลัก">
-      ${kpiCard(1, ICON.coin, "มูลค่าคงคลัง", "kVal", 60)}
-      ${kpiCard(4, ICON.cart, "ต้องสั่งซื้อ", "kRe", 120)}
-      ${kpiCard(3, ICON.cal, "ล็อตหมดอายุ / ใกล้หมด", "kExp", 180)}
-      ${kpiCard(2, ICON.hand, "การจ่ายยา", "kDisp", 240)}
+    <section id="overview" class="page-section" aria-label="ภาพรวม">
+      <div class="section-title"><h2>ภาพรวม</h2><p>สรุปตัวชี้วัดหลักของคลังยา จุดสั่งซื้อ วันหมดอายุ และการจ่ายยาในช่วงที่เลือก</p></div>
+      <div class="kpis" aria-label="ตัวชี้วัดหลัก">
+        ${kpiCard(1, ICON.coin, "มูลค่าคงคลัง", "kVal", 40)}
+        ${kpiCard(4, ICON.cart, "ต้องสั่งซื้อ", "kRe", 80)}
+        ${kpiCard(3, ICON.cal, "ล็อตหมดอายุ / ใกล้หมด", "kExp", 120)}
+        ${kpiCard(2, ICON.hand, "การจ่ายยา", "kDisp", 160)}
+      </div>
     </section>
 
-    <section id="dispense">
+    <section id="dispense" class="page-section" aria-label="การจ่ายยา">
+      <div class="section-title"><h2>การจ่ายยา</h2><p>แนวโน้มการจ่ายยารายวัน ภาระงานเภสัชกร ยาที่จ่ายมากที่สุด และช่วงเวลาที่มีการใช้บริการ</p></div>
       <div class="grid-2">
-        <div class="card rise" style="--d:300ms">
+        <div class="card rise" style="--d:40ms">
           ${head(ICON.trend, "การจ่ายยารายวัน", "เส้นประ = ค่าเฉลี่ยทั้งช่วง",
             `<div class="seg" role="group" aria-label="หน่วยที่แสดง"><button data-trend="count" aria-pressed="true">ครั้ง</button><button data-trend="patients" aria-pressed="false">ผู้ป่วย</button></div>`)}
           <div class="chart-box"><canvas id="cTrend" aria-label="กราฟการจ่ายยารายวัน"></canvas></div>
         </div>
-        <div class="card rise" style="--d:340ms">
+        <div class="card rise" style="--d:80ms">
           ${head(ICON.users, "ภาระงานเภสัชกร", "จำนวนครั้งที่จ่าย คลิกเพื่อกรอง")}
           <div class="chart-box" style="height:200px"><canvas id="cPharm" aria-label="กราฟภาระงานเภสัชกร"></canvas></div>
           <ul class="legend" id="pharmLegend"></ul>
         </div>
       </div>
       <div class="grid-2">
-        <div class="card rise" style="--d:380ms">
+        <div class="card rise" style="--d:120ms">
           ${head(ICON.bars, "ยาที่จ่ายมากที่สุด", "จำนวนหน่วยที่จ่ายในช่วงรายงาน (10 อันดับ) · สีแท่งตามสถานะคงคลัง")}
           <div class="chart-box" style="height:330px"><canvas id="cTop" aria-label="กราฟยาที่จ่ายมากที่สุด"></canvas></div>
         </div>
-        <div class="card rise" style="--d:420ms">
+        <div class="card rise" style="--d:160ms">
           ${head(ICON.clock, "ช่วงเวลาที่จ่ายยา", "จำนวนครั้งตามชั่วโมง ใช้วางกำลังคน")}
           <div class="chart-box" style="height:330px"><canvas id="cHour" aria-label="กราฟจำนวนครั้งตามชั่วโมง"></canvas></div>
         </div>
       </div>
     </section>
 
-    <section id="reorder" class="card rise" style="--d:460ms;margin-bottom:16px">
-      <div class="table-tools">
-        ${head(ICON.cart, "สถานะคงคลังและจุดสั่งซื้อ", `คงเหลือใช้ได้ = ไม่นับล็อตที่หมดอายุ · วันคงเหลือ = คงเหลือ ÷ ใช้เฉลี่ยต่อวัน ในช่วงที่เลือก <b id="reDays"></b>`)}
-        <span class="count num" id="reCount"></span>
-      </div>
-      <div class="table-scroll tall">
-        <table>
-          <thead><tr><th>SKU</th><th>ยา</th><th class="r">คงเหลือใช้ได้</th><th class="r">จุดสั่งซื้อ</th><th class="r">ใช้/วัน</th><th>วันคงเหลือ</th><th>สถานะ</th></tr></thead>
-          <tbody id="reBody"></tbody>
-        </table>
+    <section id="reorder" class="page-section" aria-label="ต้องสั่งซื้อ">
+      <div class="section-title"><h2>ต้องสั่งซื้อ</h2><p>ติดตามคงเหลือใช้ได้ จุดสั่งซื้อ อัตราการใช้ต่อวัน และจำนวนวันที่ยาคงเหลือพอใช้</p></div>
+      <div class="card rise" style="--d:40ms">
+        <div class="table-tools">
+          ${head(ICON.cart, "สถานะคงคลังและจุดสั่งซื้อ", `คงเหลือใช้ได้ = ไม่นับล็อตที่หมดอายุ · วันคงเหลือ = คงเหลือ ÷ ใช้เฉลี่ยต่อวัน ในช่วงที่เลือก <b id="reDays"></b>`)}
+          <span class="count num" id="reCount"></span>
+        </div>
+        <div class="table-scroll tall">
+          <table>
+            <thead><tr><th>SKU</th><th>ยา</th><th class="r">คงเหลือใช้ได้</th><th class="r">จุดสั่งซื้อ</th><th class="r">ใช้/วัน</th><th>วันคงเหลือ</th><th>สถานะ</th></tr></thead>
+            <tbody id="reBody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <section id="expiry">
+    <section id="expiry" class="page-section" aria-label="วันหมดอายุ">
+      <div class="section-title"><h2>วันหมดอายุ</h2><p>มูลค่าคงคลังแยกตามระยะเวลาก่อนหมดอายุ และรายการล็อตที่ต้องตรวจสอบหรือแยกออก</p></div>
       <div class="grid-2 even">
-        <div class="card rise" style="--d:500ms">
+        <div class="card rise" style="--d:40ms">
           ${head(ICON.cal, "ล็อตตามระยะเวลาก่อนหมดอายุ", "มูลค่าคงคลังในแต่ละช่วง (บาท)")}
           <div class="chart-box"><canvas id="cExp" aria-label="กราฟมูลค่าตามช่วงวันหมดอายุ"></canvas></div>
         </div>
-        <div class="card rise" style="--d:540ms">
+        <div class="card rise" style="--d:80ms">
           <div class="table-tools">
             ${head(ICON.box, "รายการล็อต", "เรียงตามวันหมดอายุ ใกล้สุดก่อน",
               `<div class="seg" role="group" aria-label="แสดงล็อต"><button data-lot="risk" aria-pressed="true">ต้องจัดการ</button><button data-lot="all" aria-pressed="false">ทั้งหมด</button></div>`)}
@@ -1109,29 +1150,35 @@ function buildPage() {
       </div>
     </section>
 
-    <section id="log" class="card rise" style="--d:580ms;margin-bottom:16px">
-      <div class="table-tools">
-        ${head(ICON.list, "บันทึกการจ่ายยา", "แถวขีดฆ่า = ไม่นำมาคำนวณ · แถวสีแดง = จ่ายยาหมดอายุ · ⚠ = มีข้อสังเกต (ชี้เพื่อดู)",
-          `<div class="seg" role="group" aria-label="แสดงรายการ"><button data-log="all" aria-pressed="true">ทั้งหมด</button><button data-log="flag" aria-pressed="false">มีปัญหา</button></div>`)}
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>รหัส</th><th>วันเวลา</th><th>ยา</th><th>ล็อต</th><th class="r">จำนวน</th><th>ผู้ป่วย</th><th>เภสัชกร</th></tr></thead>
-          <tbody id="logBody"></tbody>
-        </table>
-      </div>
-      <div class="pager">
-        <span id="pgInfo"></span>
-        <button class="btn" id="pgPrev" aria-label="หน้าก่อน">‹</button>
-        <span class="pg-now num" id="pgNow"></span>
-        <button class="btn" id="pgNext" aria-label="หน้าถัดไป">›</button>
+    <section id="log" class="page-section" aria-label="บันทึกการจ่าย">
+      <div class="section-title"><h2>บันทึกการจ่าย</h2><p>รายละเอียดการจ่ายยารายครั้ง พร้อมเครื่องหมายแจ้งเตือนรายการผิดปกติหรือถูกตัดออก</p></div>
+      <div class="card rise" style="--d:40ms">
+        <div class="table-tools">
+          ${head(ICON.list, "บันทึกการจ่ายยา", "แถวขีดฆ่า = ไม่นำมาคำนวณ · แถวสีแดง = จ่ายยาหมดอายุ · ⚠ = มีข้อสังเกต (ชี้เพื่อดู)",
+            `<div class="seg" role="group" aria-label="แสดงรายการ"><button data-log="all" aria-pressed="true">ทั้งหมด</button><button data-log="flag" aria-pressed="false">มีปัญหา</button></div>`)}
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>รหัส</th><th>วันเวลา</th><th>ยา</th><th>ล็อต</th><th class="r">จำนวน</th><th>ผู้ป่วย</th><th>เภสัชกร</th></tr></thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span id="pgInfo"></span>
+          <button class="btn" id="pgPrev" aria-label="หน้าก่อน">‹</button>
+          <span class="pg-now num" id="pgNow"></span>
+          <button class="btn" id="pgNext" aria-label="หน้าถัดไป">›</button>
+        </div>
       </div>
     </section>
 
-    <section id="quality" class="card rise" style="--d:620ms">
-      ${head(ICON.shield, "คุณภาพข้อมูล", "ทุกปัญหาที่พบระหว่างอ่านไฟล์ และสิ่งที่ dashboard ทำกับข้อมูลนั้น (ไม่แก้ไฟล์ต้นฉบับ)")}
-      <div class="dq-sum" id="dqSum"></div>
-      <div class="dq-list" id="dqList"></div>
+    <section id="quality" class="page-section" aria-label="คุณภาพข้อมูล">
+      <div class="section-title"><h2>คุณภาพข้อมูล</h2><p>สรุปความผิดปกติที่ตรวจพบจากไฟล์ข้อมูลและวิธีจัดการโดยไม่แก้ไขไฟล์ต้นฉบับ</p></div>
+      <div class="card rise" style="--d:40ms">
+        ${head(ICON.shield, "คุณภาพข้อมูล", "ทุกปัญหาที่พบระหว่างอ่านไฟล์ และสิ่งที่ dashboard ทำกับข้อมูลนั้น (ไม่แก้ไฟล์ต้นฉบับ)")}
+        <div class="dq-sum" id="dqSum"></div>
+        <div class="dq-list" id="dqList"></div>
+      </div>
     </section>`;
 
   $("fCat").onchange = e => { state.cat = e.target.value; render(); };
@@ -1160,6 +1207,7 @@ function buildPage() {
   $("pgPrev").onclick = () => { state.logPage--; renderLog(); };
   $("pgNext").onclick = () => { state.logPage++; renderLog(); };
   state.from = D.from; state.to = D.to;
+  setSection(sectionFromHash());
   renderQuality();
   render();
 }
@@ -1489,16 +1537,54 @@ function renderQuality() {
 }
 
 /* =====================================================================
-   7) ไฮไลต์เมนูตามส่วนที่เลื่อนมาถึง
+   7) แสดงทีละส่วนตาม hash และเมนู (sidebar + แถบปุ่มเลือกส่วน)
    ===================================================================== */
-const SECTIONS = ["overview", "dispense", "reorder", "expiry", "log", "quality"];
-window.addEventListener("scroll", () => {
-  let cur = SECTIONS[0];
-  SECTIONS.forEach(id => { const el = $(id); if (el && el.getBoundingClientRect().top < 200) cur = id; });
-  if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) cur = SECTIONS[SECTIONS.length - 1];
-  document.querySelectorAll("[data-nav]").forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + cur));
-}, { passive: true });
+const SECTION_TABS = [
+  ["overview", "ภาพรวม"],
+  ["dispense", "การจ่ายยา"],
+  ["reorder", "ต้องสั่งซื้อ"],
+  ["expiry", "วันหมดอายุ"],
+  ["log", "บันทึกการจ่าย"],
+  ["quality", "คุณภาพข้อมูล"],
+];
+const SECTIONS = SECTION_TABS.map(([id]) => id);
+let currentSection = SECTIONS[0];
 
+function sectionFromHash() {
+  const h = location.hash.replace(/^#/, "");
+  return SECTIONS.includes(h) ? h : SECTIONS[0];
+}
+function setSection(id, { push = false, scroll = false } = {}) {
+  const next = SECTIONS.includes(id) ? id : SECTIONS[0];
+  const changed = next !== currentSection;
+  currentSection = next;
+  if (push && location.hash !== "#" + next) history.pushState(null, "", "#" + next);
+  SECTIONS.forEach(s => { const el = $(s); if (el) el.classList.toggle("active", s === next); });
+  document.querySelectorAll("[data-nav]").forEach(a => {
+    const on = a.getAttribute("href") === "#" + next;
+    a.classList.toggle("active", on);
+    if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  if (scroll && changed && scrollY > 180) scrollTo({ top: 0, behavior: "auto" });
+  const sec = $(next);
+  if (sec) requestAnimationFrame(() => Object.values(charts).forEach(ch => {
+    if (ch.canvas && sec.contains(ch.canvas)) { ch.resize(); ch.update("none"); }
+  }));
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-nav]");
+  if (!a) return;
+  const id = a.getAttribute("href")?.replace(/^#/, "");
+  if (!SECTIONS.includes(id)) return;
+  e.preventDefault();
+  $("sidebar").classList.remove("show");
+  $("scrim").classList.remove("show");
+  setSection(id, { push: true, scroll: true });
+});
+window.addEventListener("hashchange", () => setSection(sectionFromHash(), { scroll: true }));
+window.addEventListener("popstate", () => setSection(sectionFromHash(), { scroll: true }));
+
+setSection(sectionFromHash());
 load();
 </script>
 </body>
