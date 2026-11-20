@@ -49,7 +49,7 @@
   /* ---------- ส่วนหัว ---------- */
   header.top {
     background: var(--card);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
     box-shadow: var(--shadow);
   }
 
@@ -90,7 +90,7 @@
     padding: 6px 16px;
     border-radius: var(--pill);
     background: var(--sub);
-    border: 1px solid var(--line);
+    border: 0.5px solid var(--line);
     color: var(--muted);
     font-size: 16px;
   }
@@ -191,7 +191,7 @@
     margin-top: 24px;
     padding: 20px;
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 0.5px solid var(--line);
     border-radius: var(--radius);
     color: var(--muted);
     text-align: center;
@@ -215,7 +215,7 @@
 
   .card {
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 0.5px solid var(--line);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 20px;
@@ -298,10 +298,23 @@
     font-size: 16px;
     color: var(--text);
     background: var(--sub);
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
     border-radius: 10px;
     padding: 10px 14px;
     min-height: 50px;
+    transition: border-color 0.14s ease, box-shadow 0.14s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   select {
@@ -320,6 +333,11 @@
     border-color: var(--green);
   }
 
+  input.keypad-active {
+    border-color: var(--green);
+    box-shadow: 0 0 0 2px rgba(30, 215, 96, 0.28);
+  }
+
   .two-cols {
     display: grid;
     grid-template-columns: 1fr;
@@ -332,7 +350,7 @@
     }
   }
 
-  /* ---------- รายการยาที่ขายได้ ---------- */
+  /* ---------- รายการยาที่ขายได้ (iOS grouped list) ---------- */
   .search-box {
     margin-bottom: 14px;
   }
@@ -340,42 +358,56 @@
   .drug-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
     max-height: 540px;
     overflow-y: auto;
-    padding-right: 4px;
+    background: var(--sub);
+    border: 0.5px solid var(--line);
+    border-radius: var(--radius);
   }
 
   .drug-item {
+    position: relative;
     width: 100%;
     text-align: left;
     font: inherit;
     color: var(--text);
-    background: var(--sub);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 13px 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    transition: background-color 0.12s ease, border-color 0.12s ease;
+    transition: background-color 0.12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .drug-item + .drug-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 0;
+    height: 0.5px;
+    background: var(--line);
+    pointer-events: none;
   }
 
   .drug-item:hover {
     background: var(--hover);
-    border-color: var(--border);
   }
 
   .drug-item:focus-visible {
-    outline: 3px solid var(--green);
-    outline-offset: 2px;
+    outline: 2px solid var(--green);
+    outline-offset: -2px;
   }
 
   .drug-item.selected {
-    border-color: var(--green);
-    background: rgba(30, 215, 96, 0.1);
+    background: rgba(30, 215, 96, 0.12);
+    box-shadow: inset 3px 0 0 var(--green);
   }
 
   .drug-info {
@@ -426,12 +458,11 @@
   }
 
   .empty-state {
-    padding: 24px 16px;
+    padding: 28px 16px;
     text-align: center;
     color: var(--muted);
-    background: var(--sub);
-    border-radius: 10px;
-    border: 1px dashed var(--line);
+    background: transparent;
+    border: none;
     font-size: 16px;
   }
 
@@ -441,7 +472,7 @@
     padding: 14px 16px;
     border-radius: 10px;
     background: var(--sub);
-    border: 1px solid var(--line);
+    border: 0.5px solid var(--line);
   }
 
   .summary-top {
@@ -538,8 +569,8 @@
 
   .table-wrap {
     overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    border: 0.5px solid var(--line);
+    border-radius: var(--radius);
   }
 
   table {
@@ -554,13 +585,13 @@
     font-weight: 600;
     text-align: left;
     padding: 12px 14px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
     white-space: nowrap;
   }
 
   tbody td {
     padding: 12px 14px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
     vertical-align: top;
   }
 
@@ -596,12 +627,178 @@
   .disclaimer {
     margin-top: 22px;
     padding: 12px 16px;
-    border-radius: 10px;
+    border-radius: var(--radius);
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 0.5px solid var(--line);
     color: var(--muted);
     font-size: 16px;
     text-align: center;
+  }
+
+  /* ---------- แป้นตัวเลขบนจอแบบ iOS (โหมดมืด) ---------- */
+  .ios-keypad {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    z-index: 1000;
+    background: rgba(44, 44, 46, 0.94);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.5);
+    font-family: -apple-system, "SF Pro Text", "Noto Sans Thai", sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transform: translateY(105%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 250ms ease-out, visibility 0s linear 250ms;
+  }
+
+  @media (min-width: 561px) {
+    .ios-keypad {
+      border-left: 0.5px solid rgba(255, 255, 255, 0.14);
+      border-right: 0.5px solid rgba(255, 255, 255, 0.14);
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+    }
+  }
+
+  .ios-keypad.is-open {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 250ms ease-out, visibility 0s linear 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ios-keypad,
+    .ios-keypad.is-open {
+      transition: none;
+    }
+  }
+
+  .ios-keypad-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 12px;
+    min-height: 44px;
+    background: rgba(34, 34, 36, 0.85);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .ios-keypad-title {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ios-keypad-done {
+    appearance: none;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--green);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 8px 12px;
+    min-height: 38px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ios-keypad-done:active,
+  .ios-keypad-done.is-pressed {
+    opacity: 0.65;
+  }
+
+  .ios-keypad-done:focus-visible {
+    outline: 3px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .ios-keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ios-key {
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 5px;
+    background: #636366;
+    color: #ffffff;
+    font-family: inherit;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 60ms ease;
+  }
+
+  .ios-key:active,
+  .ios-key.is-pressed {
+    background: #8E8E93;
+  }
+
+  .ios-key:focus-visible {
+    outline: 3px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .ios-key-num {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.05;
+  }
+
+  .ios-key-sub {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    min-height: 11px;
+    margin-top: 1px;
+    text-indent: 2px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ios-key-action {
+    background: transparent;
+    box-shadow: none;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .ios-key-action:active,
+  .ios-key-action.is-pressed {
+    background: rgba(142, 142, 147, 0.35);
+  }
+
+  .ios-key-icon {
+    width: 26px;
+    height: 20px;
+    display: block;
+    pointer-events: none;
   }
 </style>
 </head>
@@ -675,7 +872,7 @@
           <!-- ห้ามกำหนด max ที่ช่องจำนวน เพื่อให้เซิร์ฟเวอร์เป็นผู้ตรวจและปฏิเสธเมื่อขายเกินยอดใช้ได้ -->
           <div class="field">
             <label for="qty-input">จำนวนที่จ่าย (จำนวนเต็มตั้งแต่ 1 ขึ้นไป)</label>
-            <input id="qty-input" name="qty" type="number" step="any" inputmode="numeric" placeholder="กรอกจำนวน">
+            <input id="qty-input" name="qty" type="number" step="any" inputmode="none" data-keypad-label="จำนวนที่จ่าย" placeholder="กรอกจำนวน">
           </div>
 
           <div class="two-cols">
@@ -1325,6 +1522,230 @@ async function handleDispenseSubmit(event) {
 }
 
 /* =====================================================================
+   แป้นตัวเลขบนจอแบบ iOS (โหมดมืด ใช้เฉพาะช่องจำนวน)
+   ===================================================================== */
+function initIosNumericKeypad(targetInput) {
+  if (!targetInput) return;
+
+  const MAX_DIGITS = 6;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const KEY_DEFS = [
+    { type: 'digit', value: '1', sub: '', label: 'เลข 1' },
+    { type: 'digit', value: '2', sub: 'ABC', label: 'เลข 2' },
+    { type: 'digit', value: '3', sub: 'DEF', label: 'เลข 3' },
+    { type: 'digit', value: '4', sub: 'GHI', label: 'เลข 4' },
+    { type: 'digit', value: '5', sub: 'JKL', label: 'เลข 5' },
+    { type: 'digit', value: '6', sub: 'MNO', label: 'เลข 6' },
+    { type: 'digit', value: '7', sub: 'PQRS', label: 'เลข 7' },
+    { type: 'digit', value: '8', sub: 'TUV', label: 'เลข 8' },
+    { type: 'digit', value: '9', sub: 'WXYZ', label: 'เลข 9' },
+    { type: 'clear', text: 'ล้าง', label: 'ล้าง' },
+    { type: 'digit', value: '0', sub: null, label: 'เลข 0' },
+    { type: 'backspace', label: 'ลบ' },
+  ];
+
+  let isOpen = false;
+  let activeInput = null;
+
+  function createBackspaceSvg() {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'ios-key-icon');
+    svg.setAttribute('viewBox', '0 0 26 20');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+
+    const outline = document.createElementNS(SVG_NS, 'path');
+    outline.setAttribute('d', 'M9.4 3H21.5C22.6 3 23.5 3.9 23.5 5V15C23.5 16.1 22.6 17 21.5 17H9.4C8.9 17 8.4 16.8 8.1 16.4L3 10.7C2.6 10.3 2.6 9.7 3 9.3L8.1 3.6C8.4 3.2 8.9 3 9.4 3Z');
+    outline.setAttribute('stroke', 'currentColor');
+    outline.setAttribute('stroke-width', '1.7');
+    outline.setAttribute('stroke-linejoin', 'round');
+
+    const cross = document.createElementNS(SVG_NS, 'path');
+    cross.setAttribute('d', 'M13.2 7.2L18.8 12.8M18.8 7.2L13.2 12.8');
+    cross.setAttribute('stroke', 'currentColor');
+    cross.setAttribute('stroke-width', '1.7');
+    cross.setAttribute('stroke-linecap', 'round');
+
+    svg.append(outline, cross);
+    return svg;
+  }
+
+  const keypad = makeEl('div', 'ios-keypad');
+  keypad.setAttribute('role', 'region');
+  keypad.setAttribute('aria-label', 'แป้นพิมพ์ตัวเลข');
+  keypad.setAttribute('aria-hidden', 'true');
+
+  const bar = makeEl('div', 'ios-keypad-bar');
+  const titleEl = makeEl('span', 'ios-keypad-title', targetInput.dataset.keypadLabel || 'จำนวน');
+  const doneBtn = makeEl('button', 'ios-keypad-done', 'เสร็จ');
+  doneBtn.type = 'button';
+  doneBtn.setAttribute('aria-label', 'เสร็จ');
+  bar.append(titleEl, doneBtn);
+
+  const grid = makeEl('div', 'ios-keypad-grid');
+
+  function triggerHaptic() {
+    if (typeof navigator !== 'undefined') {
+      navigator.vibrate?.(10);
+    }
+  }
+
+  function dispatchInputEvent(inputEl) {
+    inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  function applyKeyAction(def) {
+    if (!activeInput) return;
+    triggerHaptic();
+
+    const isBadInput = Boolean(activeInput.validity && activeInput.validity.badInput);
+    const current = isBadInput ? '' : String(activeInput.value || '');
+
+    if (def.type === 'digit') {
+      const digitCount = current.replace(/\D/g, '').length;
+      if (digitCount >= MAX_DIGITS) return;
+      activeInput.value = current + def.value;
+      dispatchInputEvent(activeInput);
+    } else if (def.type === 'backspace') {
+      activeInput.value = current.length > 0 ? current.slice(0, -1) : '';
+      dispatchInputEvent(activeInput);
+    } else if (def.type === 'clear') {
+      activeInput.value = '';
+      dispatchInputEvent(activeInput);
+    }
+  }
+
+  function bindKeyButton(btn, onAction) {
+    const clearPressed = () => btn.classList.remove('is-pressed');
+
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      btn.classList.add('is-pressed');
+      onAction();
+    });
+    btn.addEventListener('pointerup', clearPressed);
+    btn.addEventListener('pointercancel', clearPressed);
+    btn.addEventListener('pointerleave', clearPressed);
+    btn.addEventListener('click', (e) => {
+      // รองรับการกดผ่านคีย์บอร์ด (Enter / Space) โดยไม่ทำงานซ้ำกับ pointerdown
+      if (e.detail === 0) {
+        onAction();
+      }
+    });
+  }
+
+  for (const def of KEY_DEFS) {
+    const btn = makeEl('button', def.type === 'digit' ? 'ios-key' : 'ios-key ios-key-action');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', def.label);
+
+    if (def.type === 'digit') {
+      btn.append(makeEl('span', 'ios-key-num', def.value));
+      if (def.sub !== null) {
+        const subEl = makeEl('span', 'ios-key-sub', def.sub);
+        subEl.setAttribute('aria-hidden', 'true');
+        btn.append(subEl);
+      }
+    } else if (def.type === 'clear') {
+      btn.textContent = def.text;
+    } else if (def.type === 'backspace') {
+      btn.append(createBackspaceSvg());
+    }
+
+    bindKeyButton(btn, () => applyKeyAction(def));
+    grid.append(btn);
+  }
+
+  bindKeyButton(doneBtn, () => {
+    triggerHaptic();
+    closeKeypad(true);
+  });
+
+  // กันเสียโฟกัสเมื่อแตะพื้นที่ว่างในกรอบแป้น
+  keypad.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+  });
+
+  keypad.append(bar, grid);
+  document.body.append(keypad);
+
+  function syncBodyPadding() {
+    if (!isOpen) return;
+    const h = keypad.offsetHeight;
+    if (h > 0) {
+      document.body.style.paddingBottom = h + 'px';
+    }
+  }
+
+  function openKeypad(inputEl) {
+    activeInput = inputEl;
+    titleEl.textContent = inputEl.dataset.keypadLabel || 'จำนวนที่จ่าย';
+    if (!isOpen) {
+      isOpen = true;
+      keypad.classList.add('is-open');
+      keypad.setAttribute('aria-hidden', 'false');
+    }
+    activeInput.classList.add('keypad-active');
+    syncBodyPadding();
+
+    const reducedMotion = Boolean(
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+    requestAnimationFrame(() => {
+      if (isOpen && activeInput) {
+        activeInput.scrollIntoView({
+          behavior: reducedMotion ? 'auto' : 'smooth',
+          block: 'center',
+        });
+      }
+    });
+  }
+
+  function closeKeypad(shouldBlur) {
+    if (!isOpen) return;
+    isOpen = false;
+    keypad.classList.remove('is-open');
+    keypad.setAttribute('aria-hidden', 'true');
+    document.body.style.paddingBottom = '';
+
+    const prevInput = activeInput;
+    activeInput = null;
+    if (prevInput) {
+      prevInput.classList.remove('keypad-active');
+      if (shouldBlur && document.activeElement === prevInput) {
+        prevInput.blur();
+      }
+    }
+  }
+
+  targetInput.addEventListener('focus', () => openKeypad(targetInput));
+  targetInput.addEventListener('pointerdown', () => openKeypad(targetInput));
+
+  document.addEventListener('pointerdown', (e) => {
+    if (!isOpen) return;
+    if (keypad.contains(e.target) || e.target === activeInput) return;
+    if (activeInput && activeInput.id && e.target.closest && e.target.closest('label[for="' + activeInput.id + '"]')) return;
+    closeKeypad(false);
+  });
+
+  document.addEventListener('focusin', (e) => {
+    if (!isOpen) return;
+    if (e.target === activeInput || keypad.contains(e.target)) return;
+    closeKeypad(false);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!isOpen) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeKeypad(false);
+    }
+  });
+
+  window.addEventListener('resize', syncBodyPadding);
+}
+
+/* =====================================================================
    ผูกเหตุการณ์และเริ่มโหลดข้อมูลเมื่อเปิดหน้า
    ===================================================================== */
 $('#sku-select').addEventListener('change', (e) => {
@@ -1337,6 +1758,7 @@ $('#drug-search').addEventListener('input', renderDrugList);
 $('#dispense-form').addEventListener('submit', handleDispenseSubmit);
 $('#retry-btn').addEventListener('click', () => loadData(false));
 
+initIosNumericKeypad($('#qty-input'));
 loadData(false);
 </script>
 </body>
