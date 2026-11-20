@@ -6,54 +6,25 @@
 <title>ระบบร้านยาจำลอง · หน้าแรก</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app-shell.css">
 <style>
-  :root {
-    --bg: #121212;
-    --card: #181818;
-    --card-hover: #222222;
-    --sub: #1f1f1f;
-    --line: #2a2a2a;
-    --border: #383838;
-    --text: #ffffff;
-    --muted: #b3b3b3;
-    --accent: #1ed760;
-    --radius: 14px;
-    --pill: 9999px;
-    --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans Thai', system-ui, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
   .wrap {
-    max-width: 720px;
+    max-width: 780px;
     margin: 0 auto;
-    padding: 28px 18px 48px;
-  }
-
-  header.hero {
-    margin-bottom: 24px;
+    padding: 4px 0 32px;
   }
 
   .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 14px;
-    border-radius: var(--pill);
-    background: rgba(30, 215, 96, 0.12);
-    border: 1px solid rgba(30, 215, 96, 0.45);
-    color: var(--accent);
-    font-size: 16px;
+    padding: 4px 13px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+    font-size: 14px;
     font-weight: 600;
     margin: 0 0 12px;
   }
@@ -63,36 +34,24 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--accent);
-  }
-
-  h1 {
-    margin: 0 0 8px;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.35;
-  }
-
-  .subtitle {
-    margin: 0;
-    color: var(--muted);
-    font-size: 16px;
+    background: #5eead4;
   }
 
   .notice {
-    margin: 18px 0 24px;
-    padding: 14px 16px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--accent);
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: 16px;
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    color: var(--text-2);
+    font-size: 15.5px;
   }
 
   .notice strong {
     color: var(--text);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   nav.menu-list {
@@ -107,30 +66,30 @@
     justify-content: space-between;
     gap: 16px;
     min-height: 84px;
-    padding: 18px 20px;
-    background: var(--card);
+    padding: 18px 22px;
+    background: var(--surface);
     color: var(--text);
     text-decoration: none;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    border-radius: 20px;
     box-shadow: var(--shadow);
-    transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease, transform 0.15s ease;
   }
 
   a.nav-btn:hover {
-    background: var(--card-hover);
-    border-color: var(--accent);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
   }
 
   a.nav-btn:active {
-    transform: scale(0.99);
+    transform: translateY(0);
   }
 
   a.nav-btn:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 3px;
-    border-color: var(--accent);
-    background: var(--card-hover);
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-color: var(--primary);
   }
 
   .nav-text {
@@ -141,15 +100,15 @@
   }
 
   .nav-title {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     line-height: 1.35;
     color: var(--text);
   }
 
   .nav-desc {
-    font-size: 16px;
-    color: var(--muted);
+    font-size: 15.5px;
+    color: var(--text-2);
     line-height: 1.5;
   }
 
@@ -158,54 +117,51 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--pill);
-    background: rgba(30, 215, 96, 0.14);
-    color: var(--accent);
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary-text);
     font-size: 20px;
     font-weight: 700;
-    transition: background-color 0.14s ease, color 0.14s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   a.nav-btn:hover .nav-arrow,
   a.nav-btn:focus-visible .nav-arrow {
-    background: var(--accent);
-    color: #000000;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
   }
 
   footer.foot {
     margin-top: 28px;
     padding-top: 16px;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 16px;
-  }
-
-  @media (min-width: 640px) {
-    .wrap { padding: 40px 24px 56px; }
-    h1 { font-size: 32px; }
+    border-top: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 14.5px;
   }
 </style>
 </head>
-<body>
-  <main class="wrap">
-    <header class="hero">
+<body data-shell-title="ระบบจัดการร้านยาจำลอง" data-shell-crumb="เวิร์กชอปร้านยาจำลอง">
+  <main class="wrap" data-shell-content>
+    <header class="hero rise">
       <p class="eyebrow">เวิร์กชอปร้านยาจำลอง</p>
-      <h1>ระบบจัดการร้านยาจำลอง</h1>
+      <h2>ระบบจัดการร้านยาจำลอง</h2>
       <p class="subtitle">เลือกหน้าที่ต้องการใช้งานจากรายการด้านล่าง</p>
     </header>
 
-    <p class="notice" role="note">
+    <p class="notice rise" style="--d:60ms" role="note">
       <strong>คำเตือน:</strong> ข้อมูลทั้งหมดเป็นข้อมูลจำลอง ห้ามใส่ชื่อผู้ป่วยจริง
     </p>
 
-    <nav id="menu" class="menu-list" aria-label="เมนูหลักของระบบร้านยา"></nav>
+    <nav id="menu" class="menu-list rise" style="--d:120ms" aria-label="เมนูหลักของระบบร้านยา"></nav>
 
     <footer class="foot">
       ข้อมูลทั้งหมดเป็นข้อมูลจำลอง ห้ามใส่ชื่อผู้ป่วยจริง
     </footer>
   </main>
+
+<script src="assets/app-shell.js"></script>
 
 <script>
 'use strict';

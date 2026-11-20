@@ -6,273 +6,84 @@
 <title>หน้าขายยา · ระบบร้านยาจำลอง</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app-shell.css">
 <style>
-  :root {
-    --bg: #121212;
-    --card: #181818;
-    --sub: #1f1f1f;
-    --hover: #262626;
-    --line: #2a2a2a;
-    --border: #3e3e3e;
-    --text: #ffffff;
-    --muted: #b3b3b3;
-    --green: #1ed760;
-    --orange: #ffa42b;
-    --yellow: #ffd24c;
-    --red: #f3727f;
-    --radius: 12px;
-    --pill: 9999px;
-    --shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans Thai', system-ui, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
   h1, h2, h3, p { margin: 0; }
-  [hidden] { display: none !important; }
 
   .wrap {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 18px 40px;
-  }
-
-  /* ---------- ส่วนหัว ---------- */
-  header.top {
-    background: var(--card);
-    border-bottom: 0.5px solid var(--line);
-    box-shadow: var(--shadow);
-  }
-
-  .top-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .brand h1 {
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1.35;
-  }
-
-  .brand .sub {
-    color: var(--muted);
-    font-size: 16px;
-    margin-top: 2px;
-  }
-
-  .top-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .asof-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: var(--pill);
-    background: var(--sub);
-    border: 0.5px solid var(--line);
-    color: var(--muted);
-    font-size: 16px;
-  }
-
-  .asof-pill strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* ---------- ปุ่มแคปซูล ---------- */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font: inherit;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    border-radius: var(--pill);
-    padding: 10px 22px;
-    min-height: 48px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: transform 0.08s ease, background-color 0.14s ease, filter 0.14s ease;
-  }
-
-  .btn:focus-visible {
-    outline: 3px solid var(--text);
-    outline-offset: 2px;
-  }
-
-  .btn:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  .btn.primary {
-    background: var(--green);
-    color: #000000;
-  }
-
-  .btn.primary:hover:not(:disabled) {
-    filter: brightness(1.08);
-  }
-
-  .btn.secondary {
-    background: var(--sub);
-    color: var(--text);
-    border-color: var(--border);
-  }
-
-  .btn.secondary:hover:not(:disabled) {
-    background: #2b2b2b;
-    border-color: #666666;
+    padding: 4px 0 32px;
   }
 
   .btn.sell {
     width: 100%;
-    min-height: 56px;
-    font-size: 18px;
+    min-height: 54px;
+    font-size: 17px;
     font-weight: 700;
   }
 
-  .btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-
-  /* ---------- แถบเตือนข้อมูลสำรอง (สีเหลือง) ---------- */
+  /* ---------- แถบเตือนข้อมูลสำรอง ---------- */
   .fallback-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
-    margin-top: 18px;
+    margin-bottom: 18px;
     padding: 14px 18px;
-    border-radius: var(--radius);
-    background: rgba(255, 210, 76, 0.16);
-    border: 2px solid var(--yellow);
+    border-radius: 16px;
+    background: var(--warn-soft);
+    border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent);
     color: var(--text);
+    box-shadow: var(--shadow);
   }
 
   .fallback-title {
-    color: var(--yellow);
-    font-size: 18px;
+    color: var(--warn);
+    font-size: 17px;
     font-weight: 700;
   }
 
   .fallback-detail {
     color: var(--text);
-    font-size: 16px;
+    font-size: 15px;
+    margin-top: 2px;
   }
 
   .loading-msg {
-    margin-top: 24px;
-    padding: 20px;
-    background: var(--card);
-    border: 0.5px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--muted);
+    margin-top: 12px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    color: var(--text-2);
     text-align: center;
-    font-size: 16px;
+    font-size: 15.5px;
   }
 
   /* ---------- โครงหน้าสำหรับแท็บเล็ตและมือถือ ---------- */
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 18px;
   }
 
-  @media (min-width: 880px) {
+  @media (min-width: 960px) {
     .grid {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
       align-items: start;
     }
   }
 
-  .card {
-    background: var(--card);
-    border: 0.5px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 20px;
-  }
-
-  .card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-
-  .card-head h2 {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
   .count-text {
-    color: var(--muted);
-    font-size: 16px;
-  }
-
-  /* ---------- ป้ายเตือน (มีทั้งสีและข้อความ) ---------- */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px 12px;
-    border-radius: var(--pill);
-    font-size: 16px;
-    font-weight: 600;
-    border: 1px solid;
-    white-space: nowrap;
-  }
-
-  .badge::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-  }
-
-  .badge.low {
-    color: var(--orange);
-    border-color: var(--orange);
-    background: rgba(255, 164, 43, 0.14);
-  }
-
-  .badge.ok {
-    color: var(--green);
-    border-color: var(--green);
-    background: rgba(30, 215, 96, 0.14);
+    color: var(--text-2);
+    font-size: 14px;
+    background: var(--surface-2);
+    padding: 3px 11px;
+    border-radius: 999px;
   }
 
   /* ---------- ช่องกรอกและฟอร์ม ---------- */
@@ -280,30 +91,14 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
-  label {
-    color: var(--muted);
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  input[type="search"],
-  select {
+  .field input,
+  .field select,
+  .search-box input {
     width: 100%;
-    font: inherit;
-    font-size: 16px;
-    color: var(--text);
-    background: var(--sub);
-    border: 0.5px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    min-height: 50px;
-    transition: border-color 0.14s ease, box-shadow 0.14s ease;
-    -webkit-tap-highlight-color: transparent;
+    min-height: 48px;
   }
 
   input[type="number"] {
@@ -315,22 +110,6 @@
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-
-  select {
-    color-scheme: dark;
-    cursor: pointer;
-  }
-
-  input::placeholder {
-    color: #8a8a8a;
-  }
-
-  input:focus-visible,
-  select:focus-visible {
-    outline: 3px solid var(--green);
-    outline-offset: 2px;
-    border-color: var(--green);
   }
 
   .two-cols {
@@ -345,20 +124,22 @@
     }
   }
 
-  /* ---------- รายการยาที่ขายได้ (iOS grouped list) ---------- */
+  /* ---------- รายการยาที่พร้อมจ่าย ---------- */
   .search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     margin-bottom: 14px;
   }
 
   .drug-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    max-height: 540px;
+    max-height: 520px;
     overflow-y: auto;
-    background: var(--sub);
-    border: 0.5px solid var(--line);
-    border-radius: var(--radius);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
   }
 
   .drug-item {
@@ -376,7 +157,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    transition: background-color 0.12s ease;
+    transition: background-color 0.14s ease;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -386,23 +167,23 @@
     top: 0;
     left: 16px;
     right: 0;
-    height: 0.5px;
-    background: var(--line);
+    height: 1px;
+    background: var(--border);
     pointer-events: none;
   }
 
   .drug-item:hover {
-    background: var(--hover);
+    background: var(--surface);
   }
 
   .drug-item:focus-visible {
-    outline: 2px solid var(--green);
+    outline: 2px solid var(--primary);
     outline-offset: -2px;
   }
 
   .drug-item.selected {
-    background: rgba(30, 215, 96, 0.12);
-    box-shadow: inset 3px 0 0 var(--green);
+    background: var(--primary-soft);
+    box-shadow: inset 4px 0 0 var(--primary);
   }
 
   .drug-info {
@@ -420,14 +201,14 @@
   }
 
   .drug-sku {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--text);
   }
 
   .drug-name {
-    font-size: 16px;
-    color: var(--muted);
+    font-size: 14.5px;
+    color: var(--text-2);
   }
 
   .drug-qty-box {
@@ -436,38 +217,36 @@
   }
 
   .drug-qty {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    color: var(--green);
+    color: var(--primary-text);
     line-height: 1.3;
   }
 
   .drug-item.is-low .drug-qty {
-    color: var(--orange);
+    color: var(--warn);
   }
 
   .drug-unit {
-    font-size: 16px;
-    color: var(--muted);
+    font-size: 14.5px;
+    color: var(--text-2);
   }
 
   .empty-state {
     padding: 28px 16px;
     text-align: center;
-    color: var(--muted);
-    background: transparent;
-    border: none;
-    font-size: 16px;
+    color: var(--text-2);
+    font-size: 15px;
   }
 
   /* ---------- สรุปยาที่เลือก ---------- */
   .selected-summary {
     margin-bottom: 16px;
     padding: 14px 16px;
-    border-radius: 10px;
-    background: var(--sub);
-    border: 0.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
   }
 
   .summary-top {
@@ -479,14 +258,15 @@
   }
 
   .summary-name {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
+    color: var(--text);
   }
 
   .summary-meta {
     margin-top: 6px;
-    color: var(--muted);
-    font-size: 16px;
+    color: var(--text-2);
+    font-size: 15px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -494,7 +274,7 @@
   }
 
   .summary-qty {
-    color: var(--text);
+    color: var(--primary-text);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
@@ -503,18 +283,20 @@
   .result-box {
     margin-top: 18px;
     padding: 16px 18px;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 14px;
+    font-size: 15.5px;
   }
 
   .result-box.success {
-    background: rgba(30, 215, 96, 0.12);
-    border: 2px solid var(--green);
+    background: var(--ok-soft);
+    border: 1px solid color-mix(in srgb, var(--ok) 45%, transparent);
+    color: var(--text);
   }
 
   .result-box.error {
-    background: rgba(243, 114, 127, 0.14);
-    border: 2px solid var(--red);
+    background: var(--bad-soft);
+    border: 1px solid color-mix(in srgb, var(--bad) 45%, transparent);
+    color: var(--text);
   }
 
   .result-head {
@@ -522,16 +304,16 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
   }
 
   .result-box.success .result-head {
-    color: var(--green);
+    color: var(--ok);
   }
 
   .result-box.error .result-head {
-    color: var(--red);
+    color: var(--bad);
   }
 
   .result-lines {
@@ -545,67 +327,26 @@
 
   .result-lines li {
     padding: 8px 12px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(30, 215, 96, 0.3);
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid color-mix(in srgb, var(--ok) 30%, var(--border));
     font-variant-numeric: tabular-nums;
   }
 
   .result-balance {
     margin-top: 8px;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--ok);
     font-variant-numeric: tabular-nums;
   }
 
   /* ---------- ตารางรายการจ่ายล่าสุด 8 แถว ---------- */
   .log-section {
-    margin-top: 22px;
-  }
-
-  .table-wrap {
-    overflow-x: auto;
-    border: 0.5px solid var(--line);
-    border-radius: var(--radius);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-  }
-
-  thead th {
-    background: var(--sub);
-    color: var(--muted);
-    font-weight: 600;
-    text-align: left;
-    padding: 12px 14px;
-    border-bottom: 0.5px solid var(--line);
-    white-space: nowrap;
-  }
-
-  tbody td {
-    padding: 12px 14px;
-    border-bottom: 0.5px solid var(--line);
-    vertical-align: top;
-  }
-
-  tbody tr:hover td {
-    background: var(--hover);
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  th.num, td.num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    margin-top: 18px;
   }
 
   td.code {
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
   }
 
@@ -615,38 +356,29 @@
 
   .empty-row td {
     text-align: center;
-    color: var(--muted);
+    color: var(--text-2);
     padding: 24px 14px;
   }
 
   .disclaimer {
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 12px 16px;
-    border-radius: var(--radius);
-    background: var(--card);
-    border: 0.5px solid var(--line);
-    color: var(--muted);
-    font-size: 16px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 14.5px;
     text-align: center;
   }
 </style>
 </head>
-<body>
+<body data-shell-title="หน้าขายยา (จ่ายยาที่เคาน์เตอร์)" data-shell-crumb="ข้อมูลจำลอง ห้ามใส่ชื่อผู้ป่วยจริง">
 
-<header class="top">
-  <div class="top-inner">
-    <div class="brand">
-      <h1>หน้าขายยา (จ่ายยาที่เคาน์เตอร์)</h1>
-      <p class="sub">ข้อมูลจำลอง ห้ามใส่ชื่อผู้ป่วยจริง</p>
-    </div>
-    <div class="top-meta">
-      <p class="asof-pill">วันอ้างอิง <strong id="asof-text">กำลังโหลด…</strong></p>
-      <a href="index.html" class="btn secondary">กลับหน้าแรก</a>
-    </div>
-  </div>
-</header>
+<div data-shell-topbar>
+  <p class="asof-pill">วันอ้างอิง <strong id="asof-text">กำลังโหลด…</strong></p>
+</div>
 
-<main class="wrap">
+<main class="wrap" data-shell-content>
   <!-- แถบสีเหลืองแสดงเมื่อโหลดจากข้อมูลสำรอง -->
   <section id="fallback-banner" class="fallback-banner" role="alert" hidden>
     <div>
@@ -661,7 +393,7 @@
   <div id="pos-app" hidden>
     <div class="grid">
       <!-- ด้านซ้าย: รายการยาที่มียอดใช้ได้ -->
-      <section class="card" aria-labelledby="drug-list-heading">
+      <section class="card rise" aria-labelledby="drug-list-heading">
         <div class="card-head">
           <h2 id="drug-list-heading">รายการยาที่พร้อมจ่าย</h2>
           <span id="drug-count" class="count-text"></span>
@@ -676,7 +408,7 @@
       </section>
 
       <!-- ด้านขวา: แบบฟอร์มบันทึกการจ่ายยา -->
-      <section class="card" aria-labelledby="form-heading">
+      <section class="card rise" style="--d:60ms" aria-labelledby="form-heading">
         <div class="card-head">
           <h2 id="form-heading">บันทึกการจ่ายยา</h2>
         </div>
@@ -736,7 +468,7 @@
     </div>
 
     <!-- ตารางรายการจ่ายล่าสุด 8 แถว -->
-    <section class="card log-section" aria-labelledby="log-heading">
+    <section class="card log-section rise" style="--d:120ms" aria-labelledby="log-heading">
       <div class="card-head">
         <h2 id="log-heading">รายการจ่ายล่าสุด 8 รายการ</h2>
         <span id="log-count" class="count-text"></span>
@@ -763,6 +495,8 @@
 
   <p class="disclaimer">ข้อมูลจำลอง ห้ามใส่ชื่อผู้ป่วยจริง</p>
 </main>
+
+<script src="assets/app-shell.js"></script>
 
 <script>
 'use strict';
