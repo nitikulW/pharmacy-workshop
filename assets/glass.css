@@ -1,0 +1,74 @@
+/* =====================================================================
+   glass.css : ชั้นกระจกฝ้าแบบ Apple ใช้ร่วมทุกหน้า
+   ใช้สีเดิมจากตัวแปร (--bg, --surface, --primary ...) ไม่กำหนดสีใหม่
+   แค่ทำพื้นผิวให้โปร่งแสง + เบลอ + ขอบแสงบาง ๆ
+   โหลดไฟล์นี้หลังสไตล์ของหน้าเสมอ
+   ===================================================================== */
+:root {
+  --glass-alpha: 62%;
+  --glass-blur: blur(22px) saturate(170%);
+  --glass-edge: rgba(255, 255, 255, .55);
+  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, .65);
+}
+:root[data-theme="dark"] {
+  --glass-alpha: 58%;
+  --glass-edge: rgba(255, 255, 255, .09);
+  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, .06);
+}
+
+/* พื้นหลังมีแสงสีจาง ๆ จากสีหลักเดิม เพื่อให้เห็นความเป็นกระจก */
+body {
+  background:
+    radial-gradient(900px 600px at 8% -10%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 70%),
+    radial-gradient(800px 600px at 105% 15%, color-mix(in srgb, var(--primary-2, var(--primary)) 14%, transparent), transparent 70%),
+    radial-gradient(700px 500px at 50% 110%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* พื้นผิวกระจก */
+.sidebar,
+.topbar,
+.card,
+.kpi,
+.filters,
+.section-tabs,
+.alert-strip,
+.seg {
+  background: color-mix(in srgb, var(--surface) var(--glass-alpha), transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--glass-edge);
+  box-shadow: var(--glass-shine), var(--shadow, 0 8px 24px -8px rgba(0, 0, 0, .15));
+}
+.sidebar { border-right: 1px solid var(--glass-edge); }
+.topbar { border-bottom: 1px solid var(--glass-edge); }
+.card, .kpi, .filters, .section-tabs { border: 1px solid var(--glass-edge); }
+
+/* ช่องกรอกและตารางเป็นกระจกบางกว่า */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+thead th {
+  background: color-mix(in srgb, var(--surface-2, var(--surface)) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* เบราว์เซอร์ที่ไม่รองรับการเบลอ หรือผู้ใช้ตั้งค่าลดความโปร่งใส ให้กลับเป็นพื้นทึบตามเดิม */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sidebar, .topbar, .card, .kpi, .filters, .section-tabs, .alert-strip, .seg { background: var(--surface); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .sidebar, .topbar, .card, .kpi, .filters, .section-tabs, .alert-strip, .seg,
+  input, select, textarea, thead th {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  body { background: var(--bg); }
+}
