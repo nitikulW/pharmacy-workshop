@@ -43,7 +43,14 @@ body {
   box-shadow: var(--glass-shine), var(--shadow, 0 8px 24px -8px rgba(0, 0, 0, .15));
 }
 .sidebar { border-right: 1px solid var(--glass-edge); }
-.topbar { border-bottom: 1px solid var(--glass-edge); }
+/* แถบบนเป็นแคปซูลกระจกลอย มีขอบครบรอบ ไม่ตัดขาดกลางจอ */
+.topbar {
+  top: 10px;
+  margin: 10px 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 18px;
+}
 .card, .kpi, .filters, .section-tabs { border: 1px solid var(--glass-edge); }
 
 /* ช่องกรอกและตารางเป็นกระจกบางกว่า */
