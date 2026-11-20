@@ -5,13 +5,13 @@
    โหลดไฟล์นี้หลังสไตล์ของหน้าเสมอ
    ===================================================================== */
 :root {
-  --glass-alpha: 62%;
-  --glass-blur: blur(22px) saturate(170%);
+  --glass-alpha: 42%;
+  --glass-blur: blur(26px) saturate(180%);
   --glass-edge: rgba(255, 255, 255, .55);
   --glass-shine: inset 0 1px 0 rgba(255, 255, 255, .65);
 }
 :root[data-theme="dark"] {
-  --glass-alpha: 58%;
+  --glass-alpha: 40%;
   --glass-edge: rgba(255, 255, 255, .09);
   --glass-shine: inset 0 1px 0 rgba(255, 255, 255, .06);
 }
